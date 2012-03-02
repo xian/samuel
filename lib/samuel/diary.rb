@@ -8,9 +8,12 @@ module Samuel
     end
 
     def record_response(http, request, response, time_responded = current_time)
-      time_requested = @requests.detect { |r| r[:request] == request }[:time_requested]
-      @requests.reject! { |r| r[:request] == request }
-      log_request_and_response(http, request, response, time_requested, time_responded)
+      request = @requests.detect { |r| r[:request] == request }
+      if request
+        time_requested = request[:time_requested]
+        @requests.reject! { |r| r[:request] == request }
+        log_request_and_response(http, request, response, time_requested, time_responded)
+      end
     end
 
     def current_time
